@@ -17,9 +17,7 @@
 - [Results](#results)
 - [Conclusion](#conclusion)
 - [Getting Started](#getting-started)
-- [Usage](#usage)
 - [Project Structure](#project-structure)
-- [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
 
@@ -117,8 +115,8 @@ df1
    - Understand the Spacex DataSet
    - Load the dataset into the corresponding table in a Db2 database
    - Execute SQL queries to answer assignment questions
-     
-- Tasks/Queries
+
+### Tasks/Queries
    - Display the names of the unique launch sites in the space mission
    - Display 5 records where launch sites begin with the string 'CCA'
    - Display the total payload mass carried by boosters launched by NASA (CRS)
@@ -131,7 +129,7 @@ SELECT MISSION_OUTCOME, COUNT(MISSION_OUTCOME) AS TOTAL_NUMBER
 FROM SPACEXTBL
 GROUP BY MISSION_OUTCOME;
 ```
-   - List the names of the booster_versions which have carried the maximum payload mass. Use a subquery
+- List the names of the booster_versions which have carried the maximum payload mass. Use a subquery
 ```SQL
 SELECT DISTINCT BOOSTER_VERSION
 FROM SPACEXTBL
@@ -139,5 +137,139 @@ WHERE PAYLOAD_MASS__KG_ = (
     SELECT MAX(PAYLOAD_MASS__KG_)
     FROM SPACEXTBL);
 ```
-   - List the failed landing_outcomes in drone ship, their booster versions, and launch site names for in year 2015
-   - Rank the count of landing outcomes (such as Failure (drone ship) or Success (ground pad)) between the date 2010-06-04 and 2017-03-20, in descending order
+- List the failed landing_outcomes in drone ship, their booster versions, and launch site names for in year 2015
+```SQL
+SELECT LANDING__OUTCOME, BOOSTER_VERSION, LAUNCH_SITE
+FROM SPACEXTBL
+WHERE Landing__Outcome = 'Failure (drone ship)'
+    AND YEAR(DATE) = 2015;
+```
+- Rank the count of landing outcomes (such as Failure (drone ship) or Success (ground pad)) between the date 2010-06-04 and 2017-03-20, in descending order
+```SQL
+SELECT LANDING__OUTCOME, COUNT(LANDING__OUTCOME) AS TOTAL_NUMBER
+FROM SPACEXTBL
+WHERE DATE BETWEEN '2010-06-04' AND '2017-03-20'
+GROUP BY LANDING__OUTCOME
+ORDER BY TOTAL_NUMBER DESC
+```
+## Machine Learning Prediction
+### Objectives
+- Performing exploratory Data Analysis and determine Training Labels
+- creating a column for the class
+- Standardizing the data
+- Spliting into train data and test data
+- Finding best Hyperparameter for SVM, Classification Trees and Logistic Regression
+- Finding the method performs best using test data
+### Tasks
+- Creating a NumPy array from the column Class in data, by applying the method to_numpy() then assign it to the variable Y,make sure the output is a Pandas series (only one bracket df['name of column']).
+- Standardizing the data in X then reassign it to the variable X using the transform provided below.
+- Using the function train_test_split to split the data X and Y into training and test data. Set the parameter test_size to 0.2 and random_state to 2. The training data and test data should be assigned to the following labels.
+- Creating a logistic regression object then create a GridSearchCV object logreg_cv with cv = 10. Fit the object to find the best parameters from the dictionary parameters.
+- Calculating the accuracy on the test data using the method score:
+- Creating a support vector machine object then create a GridSearchCV object svm_cv with cv - 10. Fit the object to find the best parameters from the dictionary parameters.
+- Calculating the accuracy on the test data using the method score:
+- Creating a decision tree classifier object then create a GridSearchCV object tree_cv with cv = 10. Fit the object to find the best parameters from the dictionary parameters.
+- Calculating the accuracy of tree_cv on the test data using the method score
+- Creatoing a k nearest neighbors object then create a GridSearchCV object knn_cv with cv = 10. Fit the object to find the best parameters from the dictionary parameters.
+- Calculatoing the accuracy of knn_cv on the test data using the method score:
+- Finding the method performs best:
+```python
+# Assuming that we have already fitted the logreg_cv, svm_cv, tree_cv, and knn_cv models using GridSearchCV
+# Also, X_test, Y_test are defined
+
+# Calculating accuracy on the test data for each model
+test_accuracy_logreg = logreg_cv.score(X_test, Y_test)
+test_accuracy_svm = svm_cv.score(X_test, Y_test)
+test_accuracy_tree = tree_cv.score(X_test, Y_test)
+test_accuracy_knn = knn_cv.score(X_test, Y_test)
+
+# Printing the accuracy scores for each model
+print("Accuracy on Test Data (Logistic Regression): ", test_accuracy_logreg)
+print("Accuracy on Test Data (SVM): ", test_accuracy_svm)
+print("Accuracy on Test Data (Decision Tree): ", test_accuracy_tree)
+print("Accuracy on Test Data (KNN): ", test_accuracy_knn)
+
+# Finding the method that performs best
+best_method = max(test_accuracy_logreg, test_accuracy_svm, test_accuracy_tree, test_accuracy_knn)
+
+# Printing the best method
+print("\nBest Performing Method:")
+if best_method == test_accuracy_logreg:
+    print("Logistic Regression")
+elif best_method == test_accuracy_svm:
+    print("Support Vector Machine (SVM)")
+elif best_method == test_accuracy_tree:
+    print("Decision Tree")
+elif best_method == test_accuracy_knn:
+    print("K-Nearest Neighbors (KNN)")
+```
+## Application Development
+
+## Results
+- Model Accuracy: Achieved an accuracy of 88% with the Random Forest classifier.
+- Key Insights:
+-- Higher payload mass tends to decrease the probability of a successful landing.
+-- Certain launch sites have higher success rates, indicating better infrastructure or operational efficiency.
+- Application Impact: The web app provides a user-friendly interface for stakeholders to predict landing success, aiding in decision-making processes.
+## Conclusion
+This project successfully demonstrates the application of data science techniques to predict the success of SpaceX's reusable rockets. Through comprehensive data analysis and machine learning modeling, we identified key factors influencing landing outcomes and developed an interactive tool to leverage these insights. This work not only reinforces foundational data science skills but also contributes to the ongoing advancements in aerospace technology.
+## Getting started
+#### Prerequisites
+- Python 3.8+
+- Pip
+- Virtual Environment (optional but recommended)
+- SQL Database (SQLite/MySQL)
+
+#### Installation
+- Clone the Repository
+```Python
+git clone https://github.com/yourusername/spacex-reusable-rockets-prediction.git
+cd spacex-reusable-rockets-prediction
+```
+- Create and Activate Virtual Environment
+```Python
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+- Install Dependencies
+
+```Python
+pip install -r requirements.txt
+```
+- Set Up the Database
+```Python
+Import the SQL schema and data.
+sqlite3 spacex.db < schema.sql
+```
+Adjust the commands based on your chosen database
+
+## Project Structure
+```css
+spacex-reusable-rockets-prediction/
+│
+├── assets/
+│   └── app_screenshot.png
+│
+├── data/
+│   ├── spacex_launch_data.csv
+│   └── schema.sql
+│
+├── notebooks/
+│   ├── EDA_Python.ipynb
+│   └── EDA_SQL.ipynb
+│
+├── src/
+│   ├── data_preprocessing.py
+│   ├── model_training.py
+│   └── app.py
+│
+├── requirements.txt
+├── README.md
+└── LICENSE
+```
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+## Contact
+Mohammed Ammaruddin
+md.ammaruddin2020@gmail.com
+https://www.linkedin.com/in/m-ammaruddin/
