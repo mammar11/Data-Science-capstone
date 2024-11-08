@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 ![Coursera](https://img.shields.io/badge/Coursera-IBM%20Data%20Science%20Professional%20Certificate-brightgreen.svg)
 
-This Project was part of course in designed by IBM
+This Project was part of course designed by IBM
 
 ## Table of Contents
 
