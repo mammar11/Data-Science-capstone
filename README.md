@@ -86,8 +86,58 @@ data = pd.read_csv('spacex_launch_data.csv')
 # Data Cleaning
 data.dropna(inplace=True)
 
-# Visualization
+# *Visualization*
 sns.countplot(x='Launch Site', hue='Landing Outcome', data=data)
 plt.title('Landing Success by Launch Site')
 plt.show()
+# Plot a scatter point chart with x axis to be Pay Load Mass (kg) and y axis to be the launch site, and hue to be the class value
+sns.catplot(x="LaunchSite", y="PayloadMass", hue="Class", data=df, aspect = 5)
+plt.xlabel("Launch Site", size=20)
+plt.ylabel("Payload Mass (kg)", size=20)
 
+# A function to Extract years from the date 
+year=[]
+def Extract_year(date):
+    for i in df["Date"]:
+        year.append(i.split("-")[0])
+    return year
+
+Extract_year(df["Date"])
+zipped = zip(df['Date'], df['Orbit'], df['Outcome'],df['Class'], year)
+df1=pd.DataFrame(zipped, columns=['Date', 'Orbit', 'Outcome', 'Class', 'Year'])
+df1
+```
+### Feature Engineering
+- Created dummy variables to categorical columns
+- Cast all numeric columns to float64
+
+## Exploratory Data Analysis (EDA) Using SQL
+
+- Overview
+   - Understand the Spacex DataSet
+   - Load the dataset into the corresponding table in a Db2 database
+   - Execute SQL queries to answer assignment questions
+     
+- Tasks/Queries
+   - Display the names of the unique launch sites in the space mission
+   - Display 5 records where launch sites begin with the string 'CCA'
+   - Display the total payload mass carried by boosters launched by NASA (CRS)
+   - Display average payload mass carried by booster version F9 v1.1
+   - List the date when the first successful landing outcome in ground pad was acheived.
+   - List the names of the boosters which have success in drone ship and have payload mass greater than 4000 but less than 6000
+   - List the total number of successful and failure mission outcomes
+```SQL
+SELECT MISSION_OUTCOME, COUNT(MISSION_OUTCOME) AS TOTAL_NUMBER
+FROM SPACEXTBL
+GROUP BY MISSION_OUTCOME;
+```
+   - List the names of the booster_versions which have carried the maximum payload mass. Use a subquery
+```SQL
+SELECT DISTINCT BOOSTER_VERSION
+FROM SPACEXTBL
+WHERE PAYLOAD_MASS__KG_ = (
+    SELECT MAX(PAYLOAD_MASS__KG_)
+    FROM SPACEXTBL);
+```
+   - List the failed landing_outcomes in drone ship, their booster versions, and launch site names for in year 2015
+   - Rank the count of landing outcomes (such as Failure (drone ship) or Success (ground pad)) between the date 2010-06-04 and 2017-03-20, in descending order
