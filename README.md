@@ -208,8 +208,8 @@ elif best_method == test_accuracy_knn:
 ## Results
 - Model Accuracy: Achieved an accuracy of 88% with the Random Forest classifier.
 - Key Insights:
--- Higher payload mass tends to decrease the probability of a successful landing.
--- Certain launch sites have higher success rates, indicating better infrastructure or operational efficiency.
+   -- Higher payload mass tends to decrease the probability of a successful landing.
+   -- Certain launch sites have higher success rates, indicating better infrastructure or operational efficiency.
 - Application Impact: The web app provides a user-friendly interface for stakeholders to predict landing success, aiding in decision-making processes.
 ## Conclusion
 This project successfully demonstrates the application of data science techniques to predict the success of SpaceX's reusable rockets. Through comprehensive data analysis and machine learning modeling, we identified key factors influencing landing outcomes and developed an interactive tool to leverage these insights. This work not only reinforces foundational data science skills but also contributes to the ongoing advancements in aerospace technology.
